@@ -26,11 +26,6 @@ fi
 
 # Determine the target directory based on the flag
 TARGET_DIR=""
-# We also need the target's USER data directory to copy extensions.json correctly
-# Usually extensions.json lives in ~/.vscode/extensions/extensions.json OR ~/.vscode/extensions.json
-# But standard practice for these IDEs is often in the User data folder. 
-# However, based on your request, I will assume you want it in the extensions folder 
-# or strictly copying the file found inside ~/.vscode/extensions/ if it exists there.
 
 case "$1" in
   --cursor)
