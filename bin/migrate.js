@@ -3,6 +3,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import readline from 'readline';
 
 function getVSCodeExtensionDirs() {
   const home = os.homedir();
@@ -10,7 +11,7 @@ function getVSCodeExtensionDirs() {
 
   if (platform === 'darwin') {
     return [
-      path.join(home, '.vscode/extensions'), // PRIMARY (current)
+      path.join(home, '.vscode/extensions'),
       path.join(home, 'Library/Application Support/Code/extensions'),
       path.join(home, 'Library/Application Support/Code - Insiders/extensions'),
       path.join(home, 'Library/Application Support/VSCodium/extensions'),
@@ -32,19 +33,16 @@ function resolveSourceDir() {
   return getVSCodeExtensionDirs().find(dir => fs.existsSync(dir));
 }
 
-function resolveTargetDir() {
-  const arg = process.argv[2];
-
-  if (arg === '--cursor') {
+function resolveTargetDir(target) {
+  if (target === 'cursor') {
     return path.join(os.homedir(), '.cursor/extensions');
   }
 
-  if (arg === '--antigravity') {
+  if (target === 'antigravity') {
     return path.join(os.homedir(), '.antigravity/extensions');
   }
 
-  console.error('Usage: migrate-ide-extensions --cursor | --antigravity');
-  process.exit(1);
+  return null;
 }
 
 function scanExtensions(source, target) {
@@ -64,14 +62,43 @@ function scanExtensions(source, target) {
     });
 }
 
-function askConfirmation(message) {
+function askQuestion(question) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
   return new Promise(resolve => {
-    process.stdout.write(message);
-    process.stdin.setEncoding('utf8');
-    process.stdin.once('data', data => {
-      resolve(/^y(es)?$/i.test(data.trim()));
+    rl.question(question, answer => {
+      rl.close();
+      resolve(answer.trim());
     });
   });
+}
+
+function askConfirmation(message) {
+  return askQuestion(message).then(answer => /^y(es)?$/i.test(answer));
+}
+
+async function selectTarget() {
+  const arg = process.argv[2];
+
+  // If argument provided, use it
+  if (arg === '--cursor') return 'cursor';
+  if (arg === '--antigravity') return 'antigravity';
+
+  // Otherwise, prompt the user
+  console.log('Select migration target:');
+  console.log('  1) Cursor');
+  console.log('  2) Antigravity');
+
+  const answer = await askQuestion('\nEnter your choice (1 or 2): ');
+
+  if (answer === '1') return 'cursor';
+  if (answer === '2') return 'antigravity';
+
+  console.error('\nInvalid selection. Please run again and choose 1 or 2.');
+  process.exit(1);
 }
 
 /* ---------------- main ---------------- */
@@ -82,11 +109,13 @@ if (!sourceDir) {
   process.exit(1);
 }
 
-const targetDir = resolveTargetDir();
+const target = await selectTarget();
+const targetDir = resolveTargetDir(target);
+
 fs.mkdirSync(targetDir, { recursive: true });
 
-console.log(`Source: ${sourceDir}`);
-console.log(`Target: ${targetDir}\n`);
+console.log(`\nSource: ${sourceDir}`);
+console.log(`Target: ${targetDir} (${target})\n`);
 
 const extensions = scanExtensions(sourceDir, targetDir);
 const toCopy = extensions.filter(e => !e.exists);
