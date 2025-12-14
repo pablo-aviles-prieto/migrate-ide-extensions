@@ -1,4 +1,18 @@
 {
+  "keywords": [
+    "vscode",
+    "cursor",
+    "antigravity",
+    "extensions",
+    "migrate",
+    "migration",
+    "ide"
+  ],
+  "author": "Pablo Avilés Prieto",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pablo-aviles-prieto/migrate-ide-extensions"
+  },
   "name": "migrate-ide-extensions",
   "version": "1.0.0",
   "description": "Migrate VS Code extensions to Cursor or Antigravity",
@@ -8,5 +22,11 @@
   "type": "module",
   "scripts": {},
   "license": "ISC",
-  "packageManager": "pnpm@10.7.1"
+  "packageManager": "pnpm@10.7.1",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "bin"
+  ]
 }
