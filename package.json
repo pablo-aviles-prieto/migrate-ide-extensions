@@ -14,7 +14,7 @@
     "url": "https://github.com/pablo-aviles-prieto/migrate-ide-extensions"
   },
   "name": "migrate-ide-extensions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Migrate VS Code extensions to Cursor or Antigravity",
   "bin": {
     "migrate-ide-extensions": "./bin/migrate.js"
