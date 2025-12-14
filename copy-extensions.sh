@@ -54,7 +54,20 @@ if [ ! -d "$TARGET_DIR" ]; then
 fi
 
 # Source directory (VS Code)
-SOURCE_DIR="$HOME/.vscode/extensions"
+OS="$(uname -s)"
+
+case "$OS" in
+  Darwin)
+    SOURCE_DIR="$HOME/Library/Application Support/Code/extensions"
+    ;;
+  Linux)
+    SOURCE_DIR="$HOME/.vscode/extensions"
+    ;;
+  *)
+    echo "Unsupported OS: $OS"
+    exit 1
+    ;;
+esac
 
 if [ ! -d "$SOURCE_DIR" ]; then
   echo "Error: VS Code extensions folder not found at $SOURCE_DIR"
