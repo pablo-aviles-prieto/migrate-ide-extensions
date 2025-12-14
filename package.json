@@ -1,0 +1,12 @@
+{
+  "name": "migrate-ide-extensions",
+  "version": "1.0.0",
+  "description": "Migrate VS Code extensions to Cursor or Antigravity",
+  "bin": {
+    "migrate-ide-extensions": "./bin/migrate.js"
+  },
+  "type": "module",
+  "scripts": {},
+  "license": "ISC",
+  "packageManager": "pnpm@10.7.1"
+}
