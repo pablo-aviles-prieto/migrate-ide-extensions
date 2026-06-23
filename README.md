@@ -9,15 +9,23 @@ A simple Node.js utility to migrate your VS Code extensions to other IDEs like C
 Install globally to use the command anywhere:
 
 ```bash
+# npm
 npm install -g migrate-ide-extensions
+
+# pnpm
+pnpm add -g migrate-ide-extensions
 ```
 
-### One-time Use with npx
+### One-time Use
 
 Run without installing:
 
 ```bash
+# npx
 npx migrate-ide-extensions
+
+# pnpx
+pnpx migrate-ide-extensions
 ```
 
 ## Usage
